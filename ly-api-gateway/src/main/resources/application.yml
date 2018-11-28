@@ -17,6 +17,8 @@ zuul:
   retryable: true
   routes:
     item-service: /item/** # 将商品微服务映射到/item/**
+  #ignored-patterns: /upload/** # 忽略图片上传路径,我们这里采用忽略服务的方式
+  ignored-services: upload-servie
 ribbon:
   ConnectTimeout: 250 # 连接超时时间(ms)
   ReadTimeout: 2000 # 通信超时时间(ms)

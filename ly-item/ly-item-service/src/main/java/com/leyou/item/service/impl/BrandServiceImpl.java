@@ -89,7 +89,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Transactional
     @Override
-    public void updateBrand(BrandVo brandVo) {
+    public void  updateBrand(BrandVo brandVo) {
         Brand brand = new Brand();
         brand.setId(brandVo.getId());
         brand.setName(brandVo.getName());
@@ -106,7 +106,7 @@ public class BrandServiceImpl implements BrandService {
         //更新品牌分类表
         List<Long> cids = brandVo.getCids();
         brandMapper.deleteCategoryBrandByBid(brandVo.getId());
-        for (Long cid : cids) {
+         for (Long cid : cids) {
             resultCount = brandMapper.saveCategoryBrand(cid, brandVo.getId());
             if (resultCount == 0) {
                 throw new LyException(ExceptionEnum.UPDATE_BRAND_FAILED);
