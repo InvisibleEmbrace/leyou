@@ -2,6 +2,8 @@ package com.leyou.item.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.leyou.common.enums.ExceptionEnum;
+import com.leyou.common.exception.LyException;
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.bo.SpuBo;
 import com.leyou.item.mapper.*;
@@ -19,6 +21,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -134,11 +137,24 @@ public class GoodsServiceImpl implements GoodsService {
         spu.setCreateTime(null);
         spu.setValid(null);
         spu.setSaleable(null);
-        this.spuMapper.updateByPrimaryKeySelective(spu);
-
+        int spuResult = this.spuMapper.updateByPrimaryKeySelective(spu);
+        if (spuResult == 0) {
+            throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
+        }
         // 更新spu详情
-        this.spuDetailMapper.updateByPrimaryKeySelective(spu.getSpuDetail());
+        int spuDetailResult = this.spuDetailMapper.updateByPrimaryKeySelective(spu.getSpuDetail());
+        if (spuDetailResult == 0) {
+            throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
+        }
+    }
 
+    @Override
+    public SpuDetail querySpuDetailBySpuId(Long spuId) {
+        SpuDetail spuDetail = spuDetailMapper.selectByPrimaryKey(spuId);
+        if (spuDetail == null) {
+            throw new LyException(ExceptionEnum.SPU_NOT_FOUND);
+        }
+        return spuDetail;
     }
 
     @Override
@@ -147,10 +163,23 @@ public class GoodsServiceImpl implements GoodsService {
         Sku record = new Sku();
         record.setSpuId(spuId);
         List<Sku> skus = this.skuMapper.select(record);
-        for (Sku sku : skus) {
+        if (CollectionUtils.isEmpty(skus)) {
+            throw new LyException(ExceptionEnum.GOODS_NOT_FOUND);
+        }
+/*        for (Sku sku : skus) {
             // 同时查询出库存
             sku.setStock(this.stockMapper.selectByPrimaryKey(sku.getId()).getStock());
-        }
+            if (sku == null) {
+                throw
+                 new LyException(ExceptionEnum.GOODS_NOT_FOUND);
+            }
+        }*/
+        List<Long> idList = skus.stream().map(Sku::getId).collect(Collectors.toList());
+        //批量查询库存
+        List<Stock> stockList = stockMapper.selectByIdList(idList);
+        // 用skuId作为map 的key
+        Map<Long, Integer> map = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
+        skus.forEach(sku -> sku.setStock(map.get(sku.getId())));
         return skus;
     }
 

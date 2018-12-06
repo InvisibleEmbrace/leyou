@@ -64,21 +64,12 @@ public class GoodsController {
         }
     }
 
+
     /**
-     * 查询商品详情
-     *
+     * 根据spuId查询sku库存列表
      * @param id
      * @return
      */
-    @GetMapping("/spu/detail/{id}")
-    public ResponseEntity<SpuDetail> querySpuDetailById(@PathVariable("id") Long id) {
-        SpuDetail detail = this.goodsService.querySpuDetailById(id);
-        if (detail == null) {
-            throw new LyException(ExceptionEnum.SPEC_PARAM_NOT_FOUND);
-        }
-        return ResponseEntity.ok(detail);
-    }
-
     @GetMapping("sku/list")
     public ResponseEntity<List<Sku>> querySkuBySpuId(@RequestParam("id") Long id) {
         List<Sku> skus = this.goodsService.querySkuBySpuId(id);
@@ -105,5 +96,17 @@ public class GoodsController {
             throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
         }
     }
+
+
+    /**
+     * 查询spu详情
+     * @param spuId
+     * @return
+     */
+    @GetMapping("spu/detail/{spuId}")
+    public ResponseEntity<SpuDetail> querySpuDetailBySpuId(@PathVariable("spuId") Long spuId) {
+        return ResponseEntity.ok(goodsService.querySpuDetailBySpuId(spuId));
+    }
+
 
 }
