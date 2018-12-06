@@ -22,7 +22,7 @@ public class UploadController {
     }
 
     @GetMapping
-    public void test() {
+    public void  test() {
         System.out.println("你好OOOOOOOOOOOOOOO");
     }
 

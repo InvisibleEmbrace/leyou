@@ -15,7 +15,12 @@ import java.util.List;
 @RequestMapping("category")
 public interface CategoryApi {
 
-    @GetMapping
-    List<Category> queryByIds(@RequestParam("ids") List<Long> ids);
+    @GetMapping("names")
+    List<String> queryNameByIds(@RequestParam("ids") List<Long> ids);
+
+
+    @GetMapping("/list")
+    List<Category> queryCategoryByPid(@RequestParam(value = "pid", defaultValue = "0") Long pid);
 
 }
+     

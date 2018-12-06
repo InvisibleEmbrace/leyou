@@ -18,4 +18,7 @@ public interface CategoryService {
     List<Category> queryAllByCid3(Long id);
 
     List<Category> queryByBrandId(Long id);
+
+    // 根据分类id查询分类名
+    List<String> queryNameByIds(List<Long> idList);
 }

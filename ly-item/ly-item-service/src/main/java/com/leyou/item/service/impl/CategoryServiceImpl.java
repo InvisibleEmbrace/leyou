@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: fjw◕‿◕
@@ -47,5 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> queryByBrandId(Long bid) {
         return this.categoryMapper.queryByBrandId(bid);
+    }
+
+    @Override
+    public List<String> queryNameByIds(List<Long> idList) {
+        return this.categoryMapper.selectByIdList(idList).stream().map(Category::getName).collect(Collectors.toList());
     }
 }

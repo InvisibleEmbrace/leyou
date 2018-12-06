@@ -1,5 +1,7 @@
 package com.leyou.item.pojo;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
  * @Description: TODO
  * @Date: 2018/11/26
  */
+@Data
 @Table(name = "tb_sku")
 public class Sku {
     @Id
@@ -22,7 +25,6 @@ public class Sku {
     private Boolean enable;// 是否有效，逻辑删除用
     private Date createTime;// 创建时间
     private Date lastUpdateTime;// 最后修改时间
-   // java 的transient关键字的作用是需要实现Serilizable接口，将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。
     @Transient
     private Integer stock;// 库存
 }

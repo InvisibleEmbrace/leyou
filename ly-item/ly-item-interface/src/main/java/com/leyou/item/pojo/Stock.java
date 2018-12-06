@@ -1,5 +1,7 @@
 package com.leyou.item.pojo;
 
+import lombok.Data;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -8,6 +10,7 @@ import javax.persistence.Table;
  * @Description: TODO
  * @Date: 2018/11/26
  */
+@Data
 @Table(name = "tb_stock")
 public class Stock {
     @Id
