@@ -1,7 +1,7 @@
 package com.leyou.item.service;
 
 import com.leyou.item.pojo.SpecParam;
-import com.leyou.item.pojo.Specification;
+
 
 import java.util.List;
 
