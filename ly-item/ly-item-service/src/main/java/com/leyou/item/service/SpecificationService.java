@@ -1,7 +1,9 @@
 package com.leyou.item.service;
 
+import com.leyou.item.pojo.SpecParam;
 import com.leyou.item.pojo.Specification;
-import com.leyou.item.pojo.SpuDetail;
+
+import java.util.List;
 
 /**
  * @Author: fjw◕‿◕
@@ -10,6 +12,6 @@ import com.leyou.item.pojo.SpuDetail;
  */
 public interface SpecificationService {
 
-    Specification queryById(Long id);
+    List<SpecParam> querySpecParams(Long gid);
 
 }

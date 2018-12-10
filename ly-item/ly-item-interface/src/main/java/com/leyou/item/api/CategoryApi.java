@@ -22,5 +22,9 @@ public interface CategoryApi {
     @GetMapping("/list")
     List<Category> queryCategoryByPid(@RequestParam(value = "pid", defaultValue = "0") Long pid);
 
+
+    @GetMapping("list/ids")
+    List<Category> queryByIds(@RequestParam("ids") List<Long> ids);
+
 }
      
