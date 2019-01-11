@@ -1,7 +1,10 @@
 package com.leyou.service;
 
-import com.leyou.item.bo.SpuBo;
+
+import com.leyou.common.vo.PageResult;
+import com.leyou.item.pojo.Spu;
 import com.leyou.pojo.Goods;
+import com.leyou.pojo.SearchRequest;
 
 /**
  * @Author: fjw◕‿◕
@@ -10,6 +13,8 @@ import com.leyou.pojo.Goods;
  */
 public interface SearchService {
 
-    Goods buildGoods(SpuBo spuBo);
+    Goods buildGoods(Spu spu);
+
+    PageResult<Goods> search(SearchRequest request);
 
 }

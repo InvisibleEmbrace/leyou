@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Description: TODO
  * @Date: 2018/12/3
  */
-@SpringBootApplication(exclude= DataSourceAutoConfiguration.class)
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableDiscoveryClient
 @EnableFeignClients
 public class LeyouSearchApplication {

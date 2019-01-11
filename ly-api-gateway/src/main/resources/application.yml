@@ -17,6 +17,7 @@ zuul:
   retryable: true
   routes:
     item-service: /item/** # 将商品微服务映射到/item/**
+    search-service: /search/** # 将查询微服务映射到/search/**
   #ignored-patterns: /upload/** # 忽略图片上传路径,我们这里采用忽略服务的方式
   ignored-services: upload-servie
 ribbon:

@@ -9,7 +9,6 @@ import com.leyou.item.pojo.SpecParam;
 import com.leyou.item.service.SpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -27,15 +26,16 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Autowired
     private SpecGroupMapper specGroupMapper;
 
+
+
     @Override
-    public List<SpecParam> querySpecParams(Long gid) {
-        SpecParam specParam = new SpecParam();
-        specParam.setGroupId(gid);
-        List<SpecParam> list = specParamMapper.select(specParam);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new LyException(ExceptionEnum.SPEC_PARAM_NOT_FOUND);
-        }
-        return list;
+    public List<SpecParam> querySpecParams(Long gid, Long cid, Boolean searching, Boolean generic) {
+        SpecParam param = new SpecParam();
+        param.setGroupId(gid);
+        param.setCid(cid);
+        param.setSearching(searching);
+        param.setGeneric(generic);
+        return this.specParamMapper.select(param);
     }
 
     @Override

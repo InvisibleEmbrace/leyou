@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface SpecificationService {
 
-    List<SpecParam> querySpecParams(Long gid);
+    List<SpecParam> querySpecParams(Long gid, Long cid, Boolean searching, Boolean generic);
 
     List<SpecGroup> queryGroupByCid(Long cid);
 

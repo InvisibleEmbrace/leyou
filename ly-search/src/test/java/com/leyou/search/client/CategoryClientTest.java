@@ -28,4 +28,6 @@ public class CategoryClientTest {
         list.forEach(System.out::println);
     }
 
+
+
 }

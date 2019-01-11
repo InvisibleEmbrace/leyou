@@ -1,17 +1,16 @@
 package com.leyou.item.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
 import com.leyou.common.vo.PageResult;
-import com.leyou.item.bo.SpuBo;
 import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.*;
+import com.leyou.item.service.BrandService;
 import com.leyou.item.service.CategoryService;
 import com.leyou.item.service.GoodsService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,61 +49,71 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private SkuMapper skuMapper;
 
+    @Autowired
+    private BrandService brandService;
+
     @Override
-    public PageResult<SpuBo> querySpuByPageAndSort(Integer page, Integer rows, Boolean saleable, String key) {
+    public PageResult<Spu> querySpuByPageAndSort(Integer page, Integer rows, Boolean saleable, String key) {
         // 1、查询SPU
         // 分页,最多允许查100条
-        PageHelper.startPage(page, Math.min(rows, 100));
+        PageHelper.startPage(page, Math.min(rows, 200));
+
         // 创建查询条件
         Example example = new Example(Spu.class);
         Example.Criteria criteria = example.createCriteria();
+
         // 是否过滤上下架
         if (saleable != null) {
             criteria.orEqualTo("saleable", saleable);
         }
+
         // 是否模糊查询
         if (StringUtils.isNotBlank(key)) {
             criteria.andLike("title", "%" + key + "%");
         }
-        Page<Spu> pageInfo = (Page<Spu>) this.spuMapper.selectByExample(example);
+        // 默认排序
+        example.setOrderByClause("last_update_time DESC");
 
-        List<SpuBo> list = pageInfo.getResult().stream().map(spu -> {
-            // 2、把spu变为 spuBo
-            SpuBo spuBo = new SpuBo();
-            // 属性拷贝
-            BeanUtils.copyProperties(spu, spuBo);
+        // 查询
+        List<Spu> spus = spuMapper.selectByExample(example);
 
-            // 3、查询spu的商品分类名称,要查三级分类
-            List<String> names = this.categoryService.queryNameByIds(
-                    Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3()));
-            // 将分类名称拼接后存入
-            spuBo.setCname(StringUtils.join(names, "/"));
+        // 判断
+        if (CollectionUtils.isEmpty(spus)) {
+            throw new LyException(ExceptionEnum.SPEC_GROUP_NOT_FOUND);
+        }
+        // 解析分类和
+        loadCategoryAndBrandName(spus);
 
-            // 4、查询spu的品牌名称
-            Brand brand = this.brandMapper.selectByPrimaryKey(spu.getBrandId());
-            spuBo.setBname(brand.getName());
-            return spuBo;
-        }).collect(Collectors.toList());
+        // 解析分页的结果
+        PageInfo<Spu> info = new PageInfo<>(spus);
+        return new PageResult<>(info.getTotal(), spus);
 
-        return new PageResult<>(pageInfo.getTotal(), list);
-
+    }
+    private void loadCategoryAndBrandName(List<Spu> spus) {
+        for (Spu spu : spus) {
+            // 处理分类名称
+            List<String> names = categoryService.queryCategoryByIds(Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3())).stream().map(Category::getName).collect(Collectors.toList());
+            spu.setCname(StringUtils.join(names, "/"));
+            // 处理品牌名称
+            spu.setBname(brandService.queryBrandByBid(spu.getBrandId()).getName());
+        }
     }
 
     @Transactional
     @Override
-    public void save(SpuBo spuBo) {
+    public void save(Spu spu) {
         // 保存spu
-        spuBo.setSaleable(true);
-        spuBo.setValid(true);
-        spuBo.setCreateTime(new Date());
-        spuBo.setLastUpdateTime(spuBo.getCreateTime());
-        this.spuMapper.insert(spuBo);
+        spu.setSaleable(true);
+        spu.setValid(true);
+        spu.setCreateTime(new Date());
+        spu.setLastUpdateTime(spu.getCreateTime());
+        this.spuMapper.insert(spu);
         // 保存spu详情
-        spuBo.getSpuDetail().setSpuId(spuBo.getId());
-        this.spuDetailMapper.insert(spuBo.getSpuDetail());
+        spu.getSpuDetail().setSpuId(spu.getId());
+        this.spuDetailMapper.insert(spu.getSpuDetail());
 
         // 保存sku和库存信息
-        saveSkuAndStock(spuBo.getSkus(), spuBo.getId());
+        saveSkuAndStock(spu.getSkus(), spu.getId());
     }
 
     @Override
@@ -114,7 +123,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Transactional
     @Override
-    public void update(SpuBo spu) {
+    public void update(Spu spu) {
         // 查询以前的sku
         List<Sku> skuList = querySkuBySpuId(spu.getId());
         // 如果以前存在则删除

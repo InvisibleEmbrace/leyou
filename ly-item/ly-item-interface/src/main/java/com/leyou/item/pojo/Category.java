@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * @Date: 2018/11/16
  */
 @Data
-@Table(name = "tb_category")
+@Table(name="tb_category")
 public class Category {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -22,5 +22,4 @@ public class Category {
     private Long parentId;
     private Boolean isParent; // 注意isParent生成的getter和setter方法需要手动加上Is
     private Integer sort;
-
 }

@@ -1,5 +1,7 @@
 package com.leyou.item.web;
 
+import com.leyou.common.enums.ExceptionEnum;
+import com.leyou.common.exception.LyException;
 import com.leyou.item.pojo.SpecGroup;
 import com.leyou.item.pojo.SpecParam;
 import com.leyou.item.service.SpecificationService;
@@ -27,8 +29,16 @@ public class SpecificationController {
      * @return
      */
     @GetMapping("/params")
-    public ResponseEntity<List<SpecParam>> querySpecParam( @RequestParam(value="gid", required = false) Long gid) {
-        List<SpecParam> list = specificationService.querySpecParams(gid);
+    public ResponseEntity<List<SpecParam>> querySpecParam(
+            @RequestParam(value="gid", required = false) Long gid,
+            @RequestParam(value="cid", required = false) Long cid,
+            @RequestParam(value="searching", required = false) Boolean searching,
+            @RequestParam(value="generic", required = false) Boolean generic
+    ){
+        List<SpecParam> list = this.specificationService.querySpecParams(gid,cid,searching,generic);
+        if(list == null || list.size() == 0){
+            throw new LyException(ExceptionEnum.SPEC_GROUP_NOT_FOUND);
+        }
         return ResponseEntity.ok(list);
     }
 

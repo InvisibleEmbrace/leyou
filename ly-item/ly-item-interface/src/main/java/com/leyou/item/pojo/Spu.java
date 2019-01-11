@@ -1,24 +1,24 @@
 package com.leyou.item.pojo;
 
 import lombok.Data;
+import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: fjw◕‿◕
  * @Description: TODO
  * @Date: 2018/11/27
  */
-@Table(name = "tb_spu")
 @Data
+@Table(name = "tb_spu")
 public class Spu {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @KeySql(useGeneratedKeys = true)
     private Long id;
     private Long brandId;
     private Long cid1;// 1级类目
@@ -30,5 +30,16 @@ public class Spu {
     private Boolean valid;// 是否有效，逻辑删除用
     private Date createTime;// 创建时间
     private Date lastUpdateTime;// 最后修改时间
+
+
+    // 下面是数据库中没有的数据，本来是要放在vo中
+    @Transient // 定该属性或字段不是永久的
+    private String cname;// 商品分类名称
+    @Transient
+    private String bname;// 品牌名称
+    @Transient
+    private List<Sku> skus;
+    @Transient
+    private SpuDetail spuDetail;
 
 }
