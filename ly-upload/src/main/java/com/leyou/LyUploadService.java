@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @Description: TODO
  * @Date: 2018/11/27
  */
+
 @SpringBootApplication
 @EnableDiscoveryClient
 public class LyUploadService {
