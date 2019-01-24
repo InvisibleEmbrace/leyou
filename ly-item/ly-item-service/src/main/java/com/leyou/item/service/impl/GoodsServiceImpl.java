@@ -17,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -211,4 +208,9 @@ public class GoodsServiceImpl implements GoodsService {
             this.stockMapper.insert(stock);
         }
     }
+
+    public Spu querySpuById(Long id) {
+        return this.spuMapper.selectByPrimaryKey(id);
+    }
+
 }

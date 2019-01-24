@@ -47,7 +47,7 @@ public class GoodRepositoryTest {
         int page = 1;
         int rows = 100;
         int size = 0;
-        do {
+          do {
             // 查询spu
             PageResult<Spu> result = goodsClient.querySpuByPage(page, rows, true, null);
             List<Spu> spuList = result.getItems();

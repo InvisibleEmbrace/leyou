@@ -26,4 +26,7 @@ public interface GoodsService {
 
     SpuDetail querySpuDetailBySpuId(Long spuId);
 
+    Spu querySpuById(Long id);
+
+
 }
