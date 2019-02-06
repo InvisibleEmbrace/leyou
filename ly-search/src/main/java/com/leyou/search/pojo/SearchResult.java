@@ -1,4 +1,4 @@
-package com.leyou.pojo;
+package com.leyou.search.pojo;
 
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.pojo.Brand;

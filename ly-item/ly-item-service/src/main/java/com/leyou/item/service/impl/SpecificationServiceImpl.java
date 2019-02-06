@@ -42,10 +42,16 @@ public class SpecificationServiceImpl implements SpecificationService {
     public List<SpecGroup> queryGroupByCid(Long cid) {
         SpecGroup specGroup = new SpecGroup();
         specGroup.setCid(cid);
-        List<SpecGroup> result = specGroupMapper.select(specGroup);
-        if (result == null) {
+        List<SpecGroup> groupList = specGroupMapper.select(specGroup);
+        if (groupList == null) {
             throw new LyException(ExceptionEnum.SPEC_GROUP_NOT_FOUND);
         }
-        return result;
+        groupList.forEach(group -> {
+            SpecParam specParam = new SpecParam();
+            specParam.setGroupId(group.getId());
+            List<SpecParam> paramList = specParamMapper.select(specParam);
+            group.setParams(paramList);
+        });
+        return groupList;
     }
 }

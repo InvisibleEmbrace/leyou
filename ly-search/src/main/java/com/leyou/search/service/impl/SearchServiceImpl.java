@@ -1,22 +1,22 @@
-package com.leyou.service.impl;
+package com.leyou.search.service.impl;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.leyou.client.BrandClient;
-import com.leyou.client.CategoryClient;
-import com.leyou.client.GoodsClient;
-import com.leyou.client.SpecificationClient;
+import com.leyou.search.client.BrandClient;
+import com.leyou.search.client.CategoryClient;
+import com.leyou.search.client.GoodsClient;
+import com.leyou.search.client.SpecificationClient;
 import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
 import com.leyou.common.util.JsonUtils;
 import com.leyou.common.util.NumberUtils;
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.pojo.*;
-import com.leyou.pojo.Goods;
-import com.leyou.pojo.SearchRequest;
-import com.leyou.pojo.SearchResult;
-import com.leyou.repository.GoodsRepository;
-import com.leyou.service.SearchService;
+import com.leyou.search.pojo.Goods;
+import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.pojo.SearchResult;
+import com.leyou.search.repository.GoodsRepository;
+import com.leyou.search.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -177,6 +177,8 @@ public class SearchServiceImpl implements SearchService {
         return result;
     }
 
+
+
     /**
      * 搜索
      * @param request
@@ -325,5 +327,25 @@ public class SearchServiceImpl implements SearchService {
         // 添加过滤条件
         queryBuilder.filter(filterQueryBuilder);
         return queryBuilder;
+    }
+
+
+    @Override
+    public void createOrUpateIndex(Long spuId) {
+        // 查看spu
+        Spu spu = goodsClient.querySpuById(spuId);
+        // 构建goods
+        Goods goods = buildGoods(spu);
+        // 存入索引
+        repository.save(goods);
+    }
+
+    /**
+     * 删除索引
+     * @param spuId
+     */
+    @Override
+    public void deleteById(Long spuId) {
+        repository.deleteById(spuId);
     }
 }

@@ -1,6 +1,6 @@
-package com.leyou.repository;
+package com.leyou.search.repository;
 
-import com.leyou.pojo.Goods;
+import com.leyou.search.pojo.Goods;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**

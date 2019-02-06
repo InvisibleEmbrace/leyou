@@ -10,7 +10,9 @@ import com.leyou.item.pojo.*;
 import com.leyou.item.service.BrandService;
 import com.leyou.item.service.CategoryService;
 import com.leyou.item.service.GoodsService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
  * @Description: TODO
  * @Date: 2018/11/29
  */
+@Slf4j
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
@@ -48,6 +51,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private BrandService brandService;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @Override
     public PageResult<Spu> querySpuByPageAndSort(Integer page, Integer rows, Boolean saleable, String key) {
@@ -111,6 +117,8 @@ public class GoodsServiceImpl implements GoodsService {
 
         // 保存sku和库存信息
         saveSkuAndStock(spu.getSkus(), spu.getId());
+        // 发送消息
+        sendMessage(spu.getId(), "insert");
     }
 
     @Override
@@ -152,6 +160,8 @@ public class GoodsServiceImpl implements GoodsService {
         if (spuDetailResult == 0) {
             throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
         }
+        // 发送消息
+        sendMessage(spu.getId(), "update");
     }
 
     @Override
@@ -213,4 +223,13 @@ public class GoodsServiceImpl implements GoodsService {
         return this.spuMapper.selectByPrimaryKey(id);
     }
 
+
+    private void sendMessage(Long id, String type){
+        // 发送消息
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (Exception e) {
+            log.error("{}商品消息发送异常，商品id：{}", type, id, e);
+        }
+    }
 }

@@ -1,11 +1,11 @@
-package com.leyou.web;
+package com.leyou.search.web;
 
 import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
 import com.leyou.common.vo.PageResult;
-import com.leyou.pojo.Goods;
-import com.leyou.pojo.SearchRequest;
-import com.leyou.service.SearchService;
+import com.leyou.search.pojo.Goods;
+import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

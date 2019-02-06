@@ -1,4 +1,4 @@
-package com.leyou.pojo;
+package com.leyou.search.pojo;
 
 import java.util.Map;
 
