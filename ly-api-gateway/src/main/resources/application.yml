@@ -19,8 +19,11 @@ zuul:
     item-service: /item/** # 将商品微服务映射到/item/**
     search-service: /search/** # 将查询微服务映射到/search/**
     user-service: /user/**
+    auth-service: /auth/**
   #ignored-patterns: /upload/** # 忽略图片上传路径,我们这里采用忽略服务的方式
   ignored-services: upload-servie
+  add-host-header: true #携带请求本身的host信息
+  sensitive-headers:  #禁止使用头信息，设置为null,否则set-cookie无效
 ribbon:
   ConnectTimeout: 250 # 连接超时时间(ms)
   ReadTimeout: 2000 # 通信超时时间(ms)
@@ -34,3 +37,15 @@ hystrix:
         isolation:
           thread:
             timeoutInMillisecond: 10000 # 熔断超时时长：10000ms
+ly:
+  jwt:
+    pubKeyPath: D:/rsa/rsa.pub # 公钥地址
+    cookieName: LY_TOKEN # cookie的名称
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item

@@ -54,7 +54,7 @@ public class UploadService {
             StorePath storePath = this.fastFileStorageClient.uploadFile(
                     file.getInputStream(), file.getSize(), extension, null);
             // 2.3、返回完整路径
-            return "http://image.leyou.com/" + storePath.getFullPath();
+            return "http://image.com.leyou.com/" + storePath.getFullPath();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

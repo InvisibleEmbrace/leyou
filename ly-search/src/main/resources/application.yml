@@ -11,9 +11,9 @@ spring:
     default-property-inclusion: non_null # 把是null的值排除
   rabbitmq:
     host: 127.0.0.1
-    username: leyou
-    password: leyou
-    virtual-host: /leyou
+    username: com.leyou
+    password: com.leyou
+    virtual-host: /com.leyou
 eureka:
   client:
     service-url:

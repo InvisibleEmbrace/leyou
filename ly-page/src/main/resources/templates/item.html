@@ -688,7 +688,7 @@
         },
         computed: {
         sku() {
-            const index = Object.values(this.indexes).join("_");//[0,0,0]  0_0_0
+            const index = Object.values(this.indexes).join("_");//[0,0,0]  0_0_ 0
             return this.skus.find(s => s.indexes == index);
         },
         images() {
@@ -713,7 +713,7 @@
                 ly.http.post("/cart/addCart", cart)
                 .then(resp => {
                 // 跳转  用来展示购物车的内容
-                window.location.href = "http://www.leyou.com/cart.html";
+                window.location.href = "http://www.com.leyou.com/cart.html";
         }).catch(resp => {
                 alert("添加失败");
         })

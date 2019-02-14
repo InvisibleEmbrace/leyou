@@ -4,7 +4,7 @@ spring:
   application:
     name: item-service
   datasource:
-    url: jdbc:mysql://localhost:3306/leyou
+    url: jdbc:mysql://localhost:3306/com.leyou
     username: root
     password: root
     hikari:
@@ -12,9 +12,9 @@ spring:
       minimum-idle: 10
   rabbitmq:
     host: 127.0.0.1
-    username: leyou
-    password: leyou
-    virtual-host: /leyou
+    username: com.leyou
+    password: com.leyou
+    virtual-host: /com.leyou
     template:
       retry:
         enabled: true

@@ -19,10 +19,10 @@ public class GlobalCorsConfig {
         //1.添加CORS配置信息
         CorsConfiguration config = new CorsConfiguration();
         //1) 允许的域,不要写*，否则cookie就无法使用了
-        config.addAllowedOrigin("http://manage.leyou.com");
-        config.addAllowedOrigin("http://www.leyou.com");
-        config.addAllowedOrigin("http://api.leyou.com");
-        config.addAllowedOrigin("http://image.leyou.com");
+        config.addAllowedOrigin("http://manage.com.leyou.com");
+        config.addAllowedOrigin("http://www.com.leyou.com");
+        config.addAllowedOrigin("http://api.com.leyou.com");
+        config.addAllowedOrigin("http://image.com.leyou.com");
         //2) 是否发送Cookie信息
         config.setAllowCredentials(true);
         //3) 允许的请求方式
